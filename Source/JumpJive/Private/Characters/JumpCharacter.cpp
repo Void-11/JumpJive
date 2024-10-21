@@ -1,5 +1,6 @@
 #include "Characters/JumpCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 
@@ -11,11 +12,19 @@ AJumpCharacter::AJumpCharacter()
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(GetRootComponent());
-	//SpringArm->TargetArmLength = 500.f;
-	//SpringArm->bUsePawnControlRotation = true;
+	SpringArm->TargetArmLength = 500.f;
+	SpringArm->SocketOffset = FVector(0,0,120);
+	SpringArm->bUsePawnControlRotation = true;
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(SpringArm);
+	FollowCamera->AttachToComponent(SpringArm,FAttachmentTransformRules::KeepRelativeTransform);
+
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = false;
+
+	GetCharacterMovement()->MaxWalkSpeed = 500;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 }
 
